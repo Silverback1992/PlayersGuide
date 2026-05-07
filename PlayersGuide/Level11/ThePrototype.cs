@@ -1,16 +1,12 @@
-﻿namespace PlayersGuide.Level11;
+﻿using PlayersGuide.Level13;
+
+namespace PlayersGuide.Level11;
 
 public static class ThePrototype
 {
     public static void Solution()
     {
-        int number;
-
-        do
-        {
-            Console.Write("User 1, enter a number between 0 and 100: ");
-            number = int.Parse(Console.ReadLine()!);
-        } while (number < 0 || number > 100);
+        int number = TakingANumber.AskForNumberInRange("User 1, enter a number between 0 and 100: ", 0, 100);
 
         Console.Clear();
 
@@ -20,8 +16,7 @@ public static class ThePrototype
 
         do
         {
-            Console.Write("What is your next guess? ");
-            guess = int.Parse(Console.ReadLine()!);
+            guess = TakingANumber.AskForANumber("What is your next guess? ");
 
             if (guess > number)
             {

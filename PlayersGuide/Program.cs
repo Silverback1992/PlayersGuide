@@ -6,7 +6,7 @@
 // Jagged arrays p 96
 // multidimensional arrays p. 96
 
-using PlayersGuide.Level10;
-using PlayersGuide.Level11;
+using PlayersGuide.Level13;
+using PlayersGuide.Level14;
 
-TheMagicCannon.Solution();
+HuntingTheManticore.Solution();
