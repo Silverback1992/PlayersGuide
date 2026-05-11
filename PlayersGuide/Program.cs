@@ -1,7 +1,7 @@
 ﻿// Worth mentioninng from the C# Player's Book
 
-// composite type p. 138
 
 using PlayersGuide.Level16;
+using PlayersGuide.Level17;
 
-SimulasTest.Solution();
+SimulasSoup.Solution();
