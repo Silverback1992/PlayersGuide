@@ -2,9 +2,16 @@
 
 public class Arrow
 {
-    public Arrowhead Arrowhead { get; set; }
-    public Fletching Fletching { get; set; }
-    public int Shaft { get; set; }
+    public Arrowhead Arrowhead { get; }
+    public Fletching Fletching { get; }
+    public int Shaft { get; }
+
+    public Arrow(Arrowhead arrowhead, Fletching fletching, int shaft)
+    {
+        Arrowhead = arrowhead;
+        Fletching = fletching;
+        Shaft = shaft;
+    }
 
     public float GetCost()
     {
@@ -28,4 +35,8 @@ public class Arrow
 
         return arrowheadCost + fletchingCost + shaftCost;
     }
+
+    public static Arrow CreateEliteArrow() => new(Arrowhead.Steel, Fletching.Plastic, 95);
+    public static Arrow CreateBeginnerArrow() => new(Arrowhead.Wood, Fletching.GooseFeathers, 75);
+    public static Arrow CreateMarksmanArrow() => new(Arrowhead.Steel, Fletching.TurkeyFeathers, 65);
 }
