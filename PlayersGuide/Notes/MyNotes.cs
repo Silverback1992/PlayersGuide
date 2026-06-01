@@ -190,7 +190,7 @@ public static class MyNotes
 
         // In contrast a # will leave a place for a digit but will not display anything if the number doesn't have a digit in that place.
         Console.WriteLine($"{42:###.###}");
-        Console.WriteLine($"{42.1234:#.##}");
+        Console.WriteLine($"{42.1294:#.##}");
 
         // You can also use the % symbol to make a number be represented as a percent instead of a fraction.
         Console.WriteLine($"{4f / 9f:0.0%}");
@@ -380,6 +380,86 @@ public static class MyNotes
         Console.WriteLine();
 
         #region Memory Management
+
+        // The stack
+        // When a method is called enough space is reserved for its local variables and parameters (its stack frame).
+        // When you return from a method space is reclaimed and reused.
+        // The stack's memory management strategy is most straightforward when data is always a known size.
+
+        // The heap
+        // When data is needed a free spot in memory is found.
+        // A reference is used to keep track of objects placed on the heap.
+
+        // The garbage cikkectir has the task of inspecting things on the heap to see if they are still in use.
+        // If not it lets the heap memory be reused.
+
+        #endregion
+
+        Console.WriteLine();
+
+        #region Semantics
+
+        // Value semantics: means two things are equal if their data elements are equal.
+        // Reference semantics: means two tings are equal if they're the same location in memory.
+
+        #endregion
+
+        Console.WriteLine();
+
+        #region Composition
+
+        // 2 contexts, 1 concept
+
+        // 1. General data composition (compositve types)
+        // What it is: the fundamental act of grouping primitive types like (int, bool, char) or
+        // other simple types together into a single logical unit.
+        // Example: a tuple (int x, int y) or a basic struct Point { int X; int Y; }
+        // The goal: combining simple data elements so you can pass them around as one single "thing" instead of managing multiple separate variables.
+
+        // 2. Object-oriented composition (the "has-a" relationship)
+        // What it is: a specific architectural design principle where complex classes are built by
+        // giving them fields/properties of other class types
+        // Example: a Car class having an Engine field and a SteeringWheel field. (A Car has an Engine.)
+        // The goal: building modular, reusable behaviors. It is heavily used as an alternative to Inheritance (which is an "is-a" relationship like a Dog is an Aniaml)
+
+        #endregion
+
+        Console.WriteLine();
+
+        #region Tuples
+
+        Console.WriteLine("Tuples:");
+
+        // Tuples are value types!
+
+        // Tuple example
+        (string, int, int) myTuple = ("R2-D2", 12420, 15);
+        var anotherTuple = ("Example", 10, 20);
+
+        // You can access the elements like so
+        Console.WriteLine("Tuple element check:");
+        Console.WriteLine($"Name: {myTuple.Item1} Level: {myTuple.Item3} Score: {myTuple.Item2}");
+
+        // Different ways to use names in tuples
+        (string Name, int Points, int Level) namedTuple = ("R2-D2", 12420, 15);
+        var varNamedTuple = (Name: "R2-D2", Points: 12420, Level: 15);
+
+        Console.WriteLine("Named tuple element check:");
+        Console.WriteLine($"Name: {namedTuple.Name} Level: {namedTuple.Level} Score: {namedTuple.Points}");
+        Console.WriteLine($"Name: {varNamedTuple.Name} Level: {varNamedTuple.Level} Score: {varNamedTuple.Points}");
+
+        // You are not required to give a name to every tuple member. 
+        // Any unnamed item will keep its original ItemN name.
+        var mixedTuple = (Name: "R2-D2", 12420, Level: 15); //same thing if you write it like (string Name, int, int Level) mixedTuple = ("R2-D2", 12420, 15);
+        Console.WriteLine("Mixed tuple element check:");
+        Console.WriteLine($"Name: {mixedTuple.Name} Level: {mixedTuple.Level} Score: {mixedTuple.Item2}");
+
+        // If you do not use var then the names will not be inferred and any name supplied when you declared the variable would be used:
+        (string, int P, int L) weirdTuple = (Name: "R2-D2", 12420, 15); // compiler even warns you!
+        Console.WriteLine("The heck is this weird tuple:");
+        Console.WriteLine($"Name: {weirdTuple.Item1} Level: {weirdTuple.L} Score: {weirdTuple.P}");
+
+        // Deconstruction
 
         #endregion
 
