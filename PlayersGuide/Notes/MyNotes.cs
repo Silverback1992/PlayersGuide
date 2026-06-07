@@ -1,4 +1,5 @@
 ﻿using PlayersGuide.Notes.Helpers;
+using System.Numerics;
 
 namespace PlayersGuide.Notes;
 
@@ -6,6 +7,18 @@ public static class MyNotes
 {
     public static void Show()
     {
+        #region Object-oriented principles
+
+        // #1: Encapsulation: Combining data (fields) and the operations on that data (methods) into a well-defined unit (like a class).
+        // #2: Information hiding: only the object itself should directly access it's data
+        // #3: Abstraction: the outside world does not need to know each object or class's inner workings and can deal with it as an abstract concept. Abstraction allows the inner workings to change without affecting the outside world.
+        // #4: Inheritance: basing one class on another, retaining the original class's functionality while extending the new class with additional capabilities.
+        // #5: Polymorphism: derived classes can override methods from the base class. The correct version is determined at runtime, so you'll get different behavior depending on the object's class.
+
+        #endregion
+
+        Console.WriteLine();
+
         #region Variable Declarations
 
         // Multiple variable declarations
@@ -460,6 +473,439 @@ public static class MyNotes
         Console.WriteLine($"Name: {weirdTuple.Item1} Level: {weirdTuple.L} Score: {weirdTuple.P}");
 
         // Deconstruction
+        // A way to take all of the parts of a tuple and place them into separate variables in one line of code.
+        (string extractedName, int extractedPoints, int extractedLevel) = myTuple;
+
+        // One use case for tuple deconstruction is swapping values without needing a temporary variable.
+        // The two variables' contents are copied over to a new tuple and then copied back to the original variables in the opposite order.
+        // The result is that the values of the two variables are swapped without needing to create a temporary variable to hold one of the values during the swap.
+        int swapThis = 10;
+        int swapThat = 20;
+        (swapThis, swapThat) = (swapThat, swapThis);
+
+        // You can use discard to ignore certain elements of a tuple when deconstructing it.
+        // This is useful when you only care about some of the values in the tuple and want to ignore the rest.
+        // The _ is a discard variable. The compiler will invent a name for it behind the scenes so the code can work, but it won't clutter up the code with useless names and leads to more readable code.
+        (string extractedName2, int extractedPoints2, _) = myTuple;
+
+        // Tuples and equality
+        // Two tuples are considered equal if all of their corresponding elements are equal.
+        var tuple1 = (X: 2, Y: 4);
+        var tuple2 = (U: 2, V: 4);
+        Console.WriteLine($"Tuple equality check: {tuple1 == tuple2}");
+
+        // Tuple pattern matching
+        // Normally a switch statement evaluates a single variable.
+        // Tuple pattern matching allows you to combine multiple variables into a temporary Tuple (var1, var2) and evaluate them simultaneously in a single switch expression.
+        // How to think about it:
+        // Think of it like building a "truth table" or a multi-column lookup grid.
+        // You are asking the compiler: "if column A is this and column B is this, what is the result?"
+        string color = "red";
+        string shape = "circle";
+
+        string itemDescription = (color, shape) switch
+        {
+            ("red", "circle") => "This is a red circle.",
+            ("red", "square") => "This is a red square.",
+            ("blue", "circle") => "This is a blue circle.",
+            ("blue", "square") => "This is a blue square.",
+            _ => "Unknown item."
+        };
+
+        // Tuple size can be anything it's not limited to just 2
+
+        // Advanced tuple pattern matching
+        (string color2, string shape2, string size2) = ("red", "circle", "small");
+
+        string otherDescription = (color2, shape2, size2) switch
+        {
+            ("red", "circle", "small") => "This is a small red circle.",
+            ("red", "circle", _) => "This is a red circle of unknown size.",
+            ("red", _, _) => "This is a red item of unknown shape and size.",
+            _ => "Unknown item."
+        };
+
+        #endregion
+
+        Console.WriteLine();
+
+        #region Class-initializing fields inline
+
+        // Check Score class in Helpers folder
+
+        var tetrisScore = new Score();
+
+        // The field assignments happen after the memory is zeroed out but before any constructor code runs.
+        // These then become the default values for these fields.
+        // Any constructor can override these defaults as needed.
+
+        #endregion
+
+        Console.WriteLine();
+
+        #region Name hiding (shadowing) in constructors
+
+        Console.WriteLine("Name hiding (shadowing) in constructors:");
+
+        // When a method or constructor parameter has the exact same name as a class level field or property, the parameter "hides" (or shadows) the field.
+        // Inside that constructor, whenever you type that name the compiler assumes you mean the parameter.
+
+        // The problem (name = name;)
+        // Because the compiler assumes you are talking about the most local variable (the parameter) typing name = name is useless.
+        // - You are literally taking the parameter's value and assigning it right back to the parameter
+        // - The actual class field is completely ignored and remains at its default value.
+
+        // this keyword: like a special variable that always refers to the object you are currently in.
+
+        // Check Person class in Helpers folder
+        var person = new Person("Alice");
+        Console.WriteLine($"Name hiding (shadowing) in constructors check: {person.Name}");
+
+        #endregion
+
+        Console.WriteLine();
+
+        #region Calling other constructors with this
+
+        Console.WriteLine("Calling other constructors with this:");
+
+        // Check City class in Helpers folder
+
+        var defaultCity = new City();
+        Console.WriteLine($"Default city check: {defaultCity.Name} {defaultCity.ZipCode}");
+
+        #endregion
+
+        Console.WriteLine();
+
+        #region Getters and Setters
+
+        // getters: methods that retrive a field's current value
+        // setters: methods that assign a new value to a field
+
+        #endregion
+
+        Console.WriteLine();
+
+        #region Static constructors
+
+        Console.WriteLine("Static constructors:");
+
+        // If a class has static fields or properties you may need to run some logic to initialize them.
+        // To address this, you could define a static constructor.
+
+        // A static constructor cannot have parameters, nor can you call it directly.
+        // Instead it runs automatically the first time you use the class.
+        // Because of this you cannot place an accessibility modifier like public or private on it.
+
+        // Check Dog class in Helpers folder
+        Console.WriteLine($"Dog static constructor check: {Dog.Name}");
+
+        #endregion
+
+        Console.WriteLine();
+
+        #region null-conditional operators
+
+        Console.WriteLine("null-conditional operators:");
+
+        // The ?. amd ?[] operators can be used in place of . and [] to simultaneously check for null and access member:
+
+        // Check the FootballPlayerScore class in the Helpers folder for an example of this in action.
+        var footballScore = new FootballScore();
+        string? topPlayer = footballScore.GetTopPlayerName();
+
+        Console.WriteLine($"Top player name check: {topPlayer}");
+
+        // Both ?. and ?[] evaluate the part before it to see if it is null. 
+        // If it is, then no further evaluation happens and the whole expression evaluates to null.
+        // If it is not null evaluation will continue as though it had been a normal . or [] operator.
+
+        // So in the GetTopPlayerMethod if _scoreManager is null then the code returns a null value without calling GetScores.
+        // If GetScore() returns null the above code returns a null without accessing index 0.
+
+        #endregion
+
+        Console.WriteLine();
+
+        #region the null-coalescing operator
+
+        // The null coalescing operator takes an expression that might be null and provide a value or expression to use as a fallback if it is.
+        // There's also the compound assignment operator ??= for this
+
+        // Check the FootballScore class in the Helpers folder for an example of this in action.
+
+        #endregion
+
+        Console.WriteLine();
+
+        #region Shallow copy vs deep copy vs reference copy
+
+        Console.WriteLine("Shallow copy vs deep copy vs reference copy:");
+
+        // Shallow copy vs deep copy
+        // The difference between the 2 only matters when you're dealing with nested reference types
+        // (like an array of classes or a class that has another class as a property).
+
+        // Shallow copy
+        // - what it does: it creates a brand new container (the top level) but it does not create new copes of the nested objects inside.
+        // Instead it just copies the references (pointers) to these inner objects.
+        // - the result: you have 2 different boxes, but they are holding the exact same items.
+        // If you reach into the copy's box and modify an item, the original object sees that modification too because they share the same inner items in memory.
+        // - how it happens: in C# myArray[..], Array.Copy(), and Object.MemberwiseClone() all create shallow copies.
+
+        // Deep copy
+        // - what it does: it creates a brand new container AND is recursively goes inside and creates brand new completely independent copies of every single nested object, array or property.
+        // - the result: you have 2 completely disconnected data structures
+        // Modifying anything in the copy is guaranteed to never affect the original
+        // - how it happens: C# does not have built in support for deep copying, because it's computationally expensive and complex.
+        // Developers usually implement deep copies manually by writing a Clone() method or by serializing the object to JSON and immediately deserializing it into a new object
+
+        // The entire concept revolves around the difference between Values types (like int, bool, struct) and Reference types (like class, arrays, lists)
+        // Imagine you have a Hero class. Inside that hero you have an int Health = 100 and a reference to an Armor class object
+
+        // The shallow clone: when you do a shallow clone in C# (usually by calling the built in MemberwiseClone() method) the computer creates a new Hero box.
+        // It literally copes the int Health = 100 over to the new box.
+        // But for the Armor object it does not create a new armor it just copies the memory address (the reference).
+        // the danger: both the Original Hero and the Clones Hero are now wearing the exact same physical suit of armor.
+        // If the Original Hero takes damage and their armor breaks the Cloned Hero's armor instantly breaks too, because they are pointing to the exact same object in memory.
+
+        // The deep clone: a deep clone is something you usually have to write yourself.
+        // - it creates a new Hero box
+        // - it copies the int Health = 100
+        // - it looks at the Armor goes into the memory heap, creates a brand new Armor object, copies the stats over and gives that new armor to the clone
+        // the result: the Original and the Clone are completely independent. What happens to one does not affect the other.
+
+        // Check Hero and Armor classes in the Helpers folder for an example of this in action.
+
+        var hero = new Hero();
+        var shallowClone = hero.CreateShallowClone();
+        shallowClone.MyArmor.Durability = 0;
+
+        Console.WriteLine($"Checking original armor value after changing shallow clone's armor: {hero.MyArmor.Durability}");
+
+        var otherHero = new Hero();
+        var deepClone = otherHero.CreateDeepClone();
+        deepClone.MyArmor.Durability = 0;
+
+        Console.WriteLine($"Checking original armor value after changing deep clone's armor: {otherHero.MyArmor.Durability}");
+
+        // Clone vs Copy (terminology)
+        // Why do we use both words?
+        // "copy" is the universal COmputer Science term
+        // "clone" is heavily used in the C# world specifically. This is because Microsoft built-in shallow copy method MemberwiseClone() and they created a built-in interface called ICloneable
+
+        // Reference copy vs shallow copy
+        // Reference copy (Hero b = a;)
+        // the reality: you did not create a second Hero. There's still only one Hero object sitting in memory.
+        // the analogy: think of the object on the heap as a physical Television. The variable a is a remote control pointing at that TV
+        // When you write Hero b = a; you are not making a copy of the TV. You are just grabbing another remote control and pointing it at the same TV.
+        // the result: if you press the "mute" button on remote b, remota a sees that the TV is muted. They are indentical.
+
+
+        // The shallow copy (Hero b = a.CreateShallowClone();)
+        // the reality: you did create a brand new parent object. There are now 2 Hero objects sitting in memory.
+        // the difference: the compute ractually goes to the heap builds a new Hero box and copies the basic statis (like Health) over
+        // It only gets "shallow" when dealing with nested objects (like Armor) where both Heroes end up sharing the same suit of armor.
+        // the result: because there are 2 distinct Hero boxes chaning the Health of Hero b does not change the Health of Hero a.
+
+        var someHero = new Hero();
+        var referenceCopy = someHero;
+        referenceCopy.Health = 50;
+
+        Console.WriteLine($"Checking original health value after changing reference copy's health: {someHero.Health}");
+
+        var andAnotherHero = new Hero();
+        var shallowCopy = andAnotherHero.CreateShallowClone();
+        shallowCopy.Health = 50;
+
+        Console.WriteLine($"Checking original health value after changing shallow copy's health: {andAnotherHero.Health}");
+
+        #endregion
+
+        Console.WriteLine();
+
+        #region Inheritance & constructors
+
+        // When you create a derived class it is fundamentally built on top of the base class
+        // Because of this the base class must be fully constructed in memory before the derived class can be constructed.
+
+        // The invisible default
+        // If your base class has no constructors defined, C# gives it an invisible parameterless constructor.
+        // When your derived class is created, C# secretly calls base() behind the scenes.
+
+        // The strict base (:base)
+        // Once you define a custom constructor in a base class with parameters, C# deletes the invisible default constructor.
+        // Now the base class requires data to be built.
+        // Because the base must be built first, the derived class is forced to collect the necessary data and pass it up to the base constructor using the :base syntax.
+
+        // Check Entity and Player classes in the Helpers folder for an example of this in action.
+
+        var player = new Player(10, "SomeName");
+
+        #endregion
+
+        Console.WriteLine();
+
+        #region Upcasting vs downcasting
+
+        // Upcasting (automatic, implicit)
+        // what it is: moving up the inheritance chain (from Player to Entity)
+        // why it's automatic: it is 100% safe. A Player is an Entity.
+        // It contains all the exact same fields and properties as Entity has plus some extra.
+        // The compiler knows it can never fail so it does it for you silently.
+
+        // The object on the heap is a Player object.
+        // The compiler with the somEntity variable looks at the object through the lens of an Entity
+        // That is why you can't access the Name property
+
+        var player2 = new Player(10, "AnotherName");
+        player2.Id = 10;
+        Entity someEntity = player2; // upcasting from Player to Entity
+        someEntity.Id = 5; // we can still access the Entity's Id property because Player inherits from Entity
+
+        Console.WriteLine(player2.Id);
+
+        // Downcasting (manual/explicit)
+        // what it is: moving down the inheritance chain (from Entity to Player)
+        // why it's manual: it is dangerous. The compiler looks at the Entity variable and says 
+        // "I know its an Entity but is it a Player? Or is it an Enemy? Or a Chest? I can't gurantee this is safe!
+        // Therefore it forces you to explicitly tell it "trust me I know what I'm doing"
+
+        Entity entity = new Player(10, "DowncastName");
+
+        // 3 ways to check entity type at runtime
+
+        // 1. GetType() method: returns the exact runtime type of the object. If you compare it to typeof(Player) you can check if it's a Player.
+        if (entity.GetType() == typeof(Player))
+        {
+            Player downcastPlayer1 = (Player)entity;
+        }
+
+        // 2. as operator: attempts to cast the object to the specified type. If the cast is successful, it returns the object as that type. If it fails, it returns null instead of throwing an exception.
+        var downcastPlayer2 = entity as Player;
+
+        if (downcastPlayer2 != null)
+        {
+            // We are guranteed that downcastPlayer2 is a Player here because if the cast had failed it would have been assigned null
+        }
+
+        // 3. is operator: checks if the object is of a certain type. It returns true if the object is of that type or a derived type, and false otherwise.
+        if (entity is Player downcastPlayer3)
+        {
+            // We are guranteed that downcastPlayer3 is a Player here because the is operator checks the type before assigning it to the variable
+        }
+
+        #endregion
+
+        Console.WriteLine();
+
+        #region Override
+
+        // When a normal (non-virtual) method is called, the compiler can determine which method to call at compile time.
+        // When a method is virtual, it cannot. Instead it records some metadata in the compiled code to know what to look up as it is running.
+
+        // An overrding method must match the name and parameters (both count and type) as the overriden method.
+        // However you can use a more specific type for the return value if you want.
+        // Check the Base and Derived classes in the Helpers folder for an example of this in action.
+
+        #endregion
+
+        Console.WriteLine();
+
+        #region new
+
+        Console.WriteLine("new:");
+
+        // If a derived class defines a member whose name matches something in a base class without overriding it a new member will be reated which hides (instead of overrides) the base class member.
+        // This is nearly always an accident caused by forgetting the override keyword. The compiler assumes as much and gives you a warning for it.
+
+        // In the rare cases where this was by design you can tell the compiler it was intentional by adding the new keyword to the member in the derived class.
+
+        // When a new member is defined unline polymorphism the behaviour depends on the type of the variable involved not the instance's type.
+        Derived derived = new();
+        Base myBase = derived;
+        Console.WriteLine($"Derived and base check: {derived.Method} {myBase.Method}");
+
+        #endregion
+
+        Console.WriteLine();
+
+        #region structs
+
+        Console.WriteLine("Structs:");
+
+        // Reference types such as a class can be null. In these cases the memory for an object doesn't exist until it is explicitly created by calling a constructor with the new keyword.
+        // For value types like structs we don't have that option. The variable's mere existence means its memory must also exist even before it has been initialized by a constructor.
+
+        // While a constructor can be used to intialize data, invoking a constructor is not always necessary.
+        PairOfInts pair;
+        pair.A = 10;
+        Console.WriteLine($"Struct check: {pair.A}");
+
+        // In C# a struct is not considered "definitely assigned" until every one of its fields has a value. Until then the compiler restricts what you can do.
+        var otherPair = new PairOfInts();
+        otherPair.WriteSomething();
+
+        PairOfInts unitializedPair;
+        // unitializedPair.WriteSomething(); // Compiler error: Use of unassigned local variable 'unitializedPair'
+        unitializedPair.A = 5;
+        unitializedPair.B = 8;
+        unitializedPair.WriteSomething();
+
+        // Inheritance does not work well when copying value types around so structs do not support it.
+        // A struct cannot pick a base class (they all derive from ValueType which derives from object).
+        // Structs are allowed to implement interfaces.
+        // Object slicing => why structs don't support inheritance: when you copy a derived class into a base class variable, the extra data in the derived class gets "sliced" off and lost. This is a problem for value types because they are copied around so much. If structs supported inheritance this would be a common source of bugs and confusion.
+
+        // The way struct and classes are managed in memory is also a driving force.
+        // Reference types like classes always get allocated individually on the heap.
+        // Structs get allocated directly in whatever contains them.
+        // That is sometimes the stack and sometimes a larger object on the heap (such as an array or class with value-type fields).
+        // Therefore instances of classes make the GC work harder while structs don't
+
+        // Performace where structs shine:
+        for (int i = 0; i < 1000000; i++)
+        {
+            CircleStruct myStruct = new(0, 0, 10);
+        }
+
+        for (int i = 0; i < 1000000; i++)
+        {
+            CircleClass myClass = new(0, 0, 10);
+        }
+
+        // Performance where classes shine:
+        var myStruct2 = new CircleStruct(0, 0, 10);
+        var myClass2 = new CircleClass(0, 0, 10);
+
+        for (int i = 0; i < 1000000; i++)
+        {
+            Displayer.DisplayStruct(myStruct2);
+        }
+
+        for(int i = 0; i < 1000000; i++)
+        {
+            Displayer.DisplayClass(myClass2);
+        }
+
+        // In short you should consider a struct when you have a type that:
+        // - is focused on data instead of behaviour
+        // - is small in size
+        // - where you don't need shared references
+        // - when being a value type works to your advantage instead of againts you
+        // If any of these is not true you should prefer a class
+
+        // Rules to follow when making structs
+        // - keep them small. That is subjective but an 8-byte struct is fine while a 200 byte struct should be avoided.
+        // - make structs immutable. Structs should represent a single compound value and as such you should make its fields readonly and not have setters (not even private) for its properties.
+        // - because struct values can exist without calling a constructor a default, zeroed-out struct should represent a valid value
+
+        #endregion
+
+        Console.WriteLine();
+
+        #region Built-in type aliases
 
         #endregion
 
