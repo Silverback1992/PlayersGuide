@@ -1,4 +1,4 @@
-﻿namespace PlayersGuide.Notes.Helpers;
+﻿namespace PlayersGuide.Notes.Helpers.ClassInitializingFieldsInline;
 
 public class Score
 {

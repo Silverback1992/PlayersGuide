@@ -1,5 +1,16 @@
 ﻿using PlayersGuide.Notes.Helpers;
-using System.Numerics;
+using PlayersGuide.Notes.Helpers.Boxing;
+using PlayersGuide.Notes.Helpers.ClassInitializingFieldsInline;
+using PlayersGuide.Notes.Helpers.Cloning;
+using PlayersGuide.Notes.Helpers.Enums;
+using PlayersGuide.Notes.Helpers.NameHiding;
+using PlayersGuide.Notes.Helpers.NewKeyword;
+using PlayersGuide.Notes.Helpers.NullConditionalOperators;
+using PlayersGuide.Notes.Helpers.NumericLiteralSuffixes;
+using PlayersGuide.Notes.Helpers.StaticConstructors;
+using PlayersGuide.Notes.Helpers.Structs;
+using PlayersGuide.Notes.Helpers.ThisKeyword;
+using PlayersGuide.Notes.Helpers.UpcastingDowncasting;
 
 namespace PlayersGuide.Notes;
 
@@ -901,11 +912,33 @@ public static class MyNotes
         // - make structs immutable. Structs should represent a single compound value and as such you should make its fields readonly and not have setters (not even private) for its properties.
         // - because struct values can exist without calling a constructor a default, zeroed-out struct should represent a valid value
 
+        // Object slicing - why structs are sealed
+        // Setup: Enemy struct with 2 int fields Health Speed (8 bytes total)
+        // Boss derived struct with 1 int field Damage (4 bytes total)
+        // Boss is 12 bytes total. If you copy a Boss into an Enemy variable the extra 4 bytes of Damage will be sliced off and lost. This is a problem for value types because they are copied around so much. If structs supported inheritance this would be a common source of bugs and confusion.
+
         #endregion
 
         Console.WriteLine();
 
         #region Built-in type aliases
+
+        // The built in types that are value types are not just value types but structs themselves.
+        // While rarely used we could refer to them with their full names instead of the aliases. For example we could use System.Int32 instead of int, System.Boolean instead of bool, System.String instead of string, etc.
+        Int32 myInt = new();
+
+        #endregion
+
+        Console.WriteLine();
+
+        #region Boxind and unboxing
+
+        object thing = 3; // Boxing: the int value 3 is being boxed into an object
+        int unboxedThing = (int)thing; // unboxing
+
+        // same can happen with structs and interfaces
+        ISomeInterface someInterface = new SomeStruct(); // Boxing: the struct is being boxed into an interface
+        SomeStruct unboxedStruct = (SomeStruct)someInterface; // unboxing
 
         #endregion
 
