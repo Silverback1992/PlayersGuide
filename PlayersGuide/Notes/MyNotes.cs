@@ -3,14 +3,19 @@ using PlayersGuide.Notes.Helpers.Boxing;
 using PlayersGuide.Notes.Helpers.ClassInitializingFieldsInline;
 using PlayersGuide.Notes.Helpers.Cloning;
 using PlayersGuide.Notes.Helpers.Enums;
+using PlayersGuide.Notes.Helpers.Generics;
+using PlayersGuide.Notes.Helpers.Generics.MultipleGenericConstraints;
+using PlayersGuide.Notes.Helpers.Generics.NakedTypeConstraints;
 using PlayersGuide.Notes.Helpers.NameHiding;
 using PlayersGuide.Notes.Helpers.NewKeyword;
 using PlayersGuide.Notes.Helpers.NullConditionalOperators;
 using PlayersGuide.Notes.Helpers.NumericLiteralSuffixes;
+using PlayersGuide.Notes.Helpers.Records;
 using PlayersGuide.Notes.Helpers.StaticConstructors;
 using PlayersGuide.Notes.Helpers.Structs;
 using PlayersGuide.Notes.Helpers.ThisKeyword;
 using PlayersGuide.Notes.Helpers.UpcastingDowncasting;
+using PlayersGuide.Notes.Helpers.WithStatement;
 
 namespace PlayersGuide.Notes;
 
@@ -895,7 +900,7 @@ public static class MyNotes
             Displayer.DisplayStruct(myStruct2);
         }
 
-        for(int i = 0; i < 1000000; i++)
+        for (int i = 0; i < 1000000; i++)
         {
             Displayer.DisplayClass(myClass2);
         }
@@ -939,6 +944,80 @@ public static class MyNotes
         // same can happen with structs and interfaces
         ISomeInterface someInterface = new SomeStruct(); // Boxing: the struct is being boxed into an interface
         SomeStruct unboxedStruct = (SomeStruct)someInterface; // unboxing
+
+        #endregion
+
+        Console.WriteLine();
+
+        #region Records
+
+        Console.WriteLine("Records:");
+
+        var pointA = new Point(1, 2);
+        //pointA.X = 3; // Compiler error: Cannot modify because Point is a record and is immutable
+
+        // string representation of a record is automatically generated for us
+        Console.WriteLine($"Point A: {pointA}");
+
+        // Value semantics: two records with the same data are considered equal
+        var pointB = new Point(1, 2);
+        Console.WriteLine($"Point A == Point B: {pointA == pointB}");
+
+        // Deconstruction: we can deconstruct a record into its individual values
+        var (extractedX, extractedY) = pointA;
+        Console.WriteLine($"Extracted X: {extractedX}, Extracted Y: {extractedY}");
+
+        // with statement
+        var pointC = pointA with { X = 3 }; // creates a new record with the same data as pointA but with X changed to 3
+
+        // Note: with can be used with records, structs and anonymous types
+        var coolStruct = new CoolStruct();
+        var coolStruct2 = coolStruct with { CoolPropertyA = 3 }; // creates a new struct with the same data as coolStruct but with CoolPropertyA changed to 3
+
+        var anonymousUser = new { Name = "John", Age = 30 };
+        var copiedUser = anonymousUser with { Age = 31 }; // creates a new anonymous type with the same data as anonymousUser but with Age changed to 31
+
+        #endregion
+
+        Console.WriteLine();
+
+        #region Generics
+
+        Console.WriteLine("Generics:");
+
+        var customNumbersList = new CustomGenericList<int>();
+        customNumbersList.Add(1);
+        customNumbersList.Add(2);
+
+        // Multiple generic type parameters
+        var genericPair = new GenericPair<int, string>(5, "Hello");
+
+        // Generic method
+        var words = GenericRepeater.Repeat("Hello", 3);
+
+        // Generic type constraints
+        var myConstrainedList = new ConstraitedList<GameObject>();
+        var trollEnemy = new Troll()
+        {
+            ID = 1,
+        };
+        myConstrainedList.Add(trollEnemy);
+
+        // Constrainting several generic type parameters
+        var manager = new LootManager();
+        var myPaladin = new Paladin();
+
+        // We pass the Paladin instance, and tell it to generate a LegendarySword
+        manager.GrantLoot<Paladin, LegendarySword>(myPaladin);
+
+        // Naked type constraints: we can use the generic type parameter itself as a constraint for another generic type parameter
+        var system = new InventorySystem();
+        var entityList = new List<Helpers.Generics.NakedTypeConstraints.Entity>();
+        var playerEntity = new Helpers.Generics.NakedTypeConstraints.Player();
+        var sword = new Sword();
+
+        system.AddToList(entityList, playerEntity);
+        // system.AddToList(entityList, sword); Compiler error: Sword does not satisfy the constraint of being an Entity
 
         #endregion
 
