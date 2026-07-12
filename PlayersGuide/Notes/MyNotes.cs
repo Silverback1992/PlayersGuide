@@ -1,4 +1,5 @@
-﻿using PlayersGuide.Notes.Helpers;
+﻿using PlayersGuide.Level24.ChamberOfDesign.Hangman;
+using PlayersGuide.Notes.Helpers;
 using PlayersGuide.Notes.Helpers.Boxing;
 using PlayersGuide.Notes.Helpers.ClassInitializingFieldsInline;
 using PlayersGuide.Notes.Helpers.Cloning;
@@ -6,6 +7,9 @@ using PlayersGuide.Notes.Helpers.Enums;
 using PlayersGuide.Notes.Helpers.Generics;
 using PlayersGuide.Notes.Helpers.Generics.MultipleGenericConstraints;
 using PlayersGuide.Notes.Helpers.Generics.NakedTypeConstraints;
+using PlayersGuide.Notes.Helpers.Generics.NotNullConstraint;
+using PlayersGuide.Notes.Helpers.Generics.StaticMembersArePerEnclosedType;
+using PlayersGuide.Notes.Helpers.Generics.UnmanagedGenericConstraint;
 using PlayersGuide.Notes.Helpers.NameHiding;
 using PlayersGuide.Notes.Helpers.NewKeyword;
 using PlayersGuide.Notes.Helpers.NullConditionalOperators;
@@ -16,6 +20,8 @@ using PlayersGuide.Notes.Helpers.Structs;
 using PlayersGuide.Notes.Helpers.ThisKeyword;
 using PlayersGuide.Notes.Helpers.UpcastingDowncasting;
 using PlayersGuide.Notes.Helpers.WithStatement;
+using System.Collections;
+using System.Runtime.InteropServices.Marshalling;
 
 namespace PlayersGuide.Notes;
 
@@ -757,7 +763,7 @@ public static class MyNotes
 
         // Check Entity and Player classes in the Helpers folder for an example of this in action.
 
-        var player = new Player(10, "SomeName");
+        var player = new PlayersGuide.Notes.Helpers.UpcastingDowncasting.Player(10, "SomeName");
 
         #endregion
 
@@ -775,9 +781,9 @@ public static class MyNotes
         // The compiler with the somEntity variable looks at the object through the lens of an Entity
         // That is why you can't access the Name property
 
-        var player2 = new Player(10, "AnotherName");
+        var player2 = new PlayersGuide.Notes.Helpers.UpcastingDowncasting.Player(10, "AnotherName");
         player2.Id = 10;
-        Entity someEntity = player2; // upcasting from Player to Entity
+        PlayersGuide.Notes.Helpers.UpcastingDowncasting.Entity someEntity = player2; // upcasting from Player to Entity
         someEntity.Id = 5; // we can still access the Entity's Id property because Player inherits from Entity
 
         Console.WriteLine(player2.Id);
@@ -788,18 +794,18 @@ public static class MyNotes
         // "I know its an Entity but is it a Player? Or is it an Enemy? Or a Chest? I can't gurantee this is safe!
         // Therefore it forces you to explicitly tell it "trust me I know what I'm doing"
 
-        Entity entity = new Player(10, "DowncastName");
+        PlayersGuide.Notes.Helpers.UpcastingDowncasting.Entity entity = new PlayersGuide.Notes.Helpers.UpcastingDowncasting.Player(10, "DowncastName");
 
         // 3 ways to check entity type at runtime
 
         // 1. GetType() method: returns the exact runtime type of the object. If you compare it to typeof(Player) you can check if it's a Player.
-        if (entity.GetType() == typeof(Player))
+        if (entity.GetType() == typeof(PlayersGuide.Notes.Helpers.UpcastingDowncasting.Player))
         {
-            Player downcastPlayer1 = (Player)entity;
+            PlayersGuide.Notes.Helpers.UpcastingDowncasting.Player downcastPlayer1 = (PlayersGuide.Notes.Helpers.UpcastingDowncasting.Player)entity;
         }
 
         // 2. as operator: attempts to cast the object to the specified type. If the cast is successful, it returns the object as that type. If it fails, it returns null instead of throwing an exception.
-        var downcastPlayer2 = entity as Player;
+        var downcastPlayer2 = entity as PlayersGuide.Notes.Helpers.UpcastingDowncasting.Player;
 
         if (downcastPlayer2 != null)
         {
@@ -807,7 +813,7 @@ public static class MyNotes
         }
 
         // 3. is operator: checks if the object is of a certain type. It returns true if the object is of that type or a derived type, and false otherwise.
-        if (entity is Player downcastPlayer3)
+        if (entity is PlayersGuide.Notes.Helpers.UpcastingDowncasting.Player downcastPlayer3)
         {
             // We are guranteed that downcastPlayer3 is a Player here because the is operator checks the type before assigning it to the variable
         }
@@ -953,14 +959,14 @@ public static class MyNotes
 
         Console.WriteLine("Records:");
 
-        var pointA = new Point(1, 2);
+        var pointA = new PlayersGuide.Notes.Helpers.Records.Point(1, 2);
         //pointA.X = 3; // Compiler error: Cannot modify because Point is a record and is immutable
 
         // string representation of a record is automatically generated for us
         Console.WriteLine($"Point A: {pointA}");
 
         // Value semantics: two records with the same data are considered equal
-        var pointB = new Point(1, 2);
+        var pointB = new PlayersGuide.Notes.Helpers.Records.Point(1, 2);
         Console.WriteLine($"Point A == Point B: {pointA == pointB}");
 
         // Deconstruction: we can deconstruct a record into its individual values
@@ -1019,7 +1025,56 @@ public static class MyNotes
         system.AddToList(entityList, playerEntity);
         // system.AddToList(entityList, sword); Compiler error: Sword does not satisfy the constraint of being an Entity
 
+        // unmanaged generic constraint
+        var memSystem = new MemorySystem();
+        memSystem.AllocateMemory(5);
+        memSystem.AllocateMemory(new Helpers.Generics.UnmanagedGenericConstraint.Point());
+        // memSystem.AllocateMemory("Hello, World!"); -> not a value type so it does not satisfy the unmanaged constraint
+        // memSystem.AllocateMemory(new Player()); -> Player is a struct but it contains a reference type field so it does not satisfy the unmanaged constraint
+        memSystem.AllocateMemory(new PlayerStats());
+
+        // notnull constraint
+        var eventBus = new EventBus();
+        // eventBus.Publish<int?>(null); only warning because notnull is a nullability constraint and not a type-identity constraint
+        // eventBus.Publish<string?>(null); only warning because notnull is a nullability constraint and not a type-identity constraint
+
+        // Variance
+        // Converiance
+        object xObject = "hello"; // plain: string stands in for object
+        IEnumerable<string> eStrings = new List<string>();
+        IEnumerable<object> eObjects = eStrings; // covariance: IEnumerable<string> stands in for IEnumerable<object>
+
+        // Contravariance
+        Action<object> printAny = o => Console.WriteLine(o);
+        Action<string> printStr = printAny; // contravariance: Action<object> stands in for Action<string>
+
+        // Invariance
+        //List<string> strings = new() { "a", "b" };
+        //List<object> objects = strings;   // ❌ CS0266 — does NOT compile
+
+        // Static members are per-closed-type
+        var counter1 = new Counter<int>();
+        var counter2 = new Counter<int>();
+        var counter3 = new Counter<string>();
+
+        Console.WriteLine(Counter<int>.Count);      // 2
+        Console.WriteLine(Counter<string>.Count);   // 1
+
+        ArrayList list = new ArrayList();
+        list.Add(1);
+        list.Add("hello");
+
+        // int asd = (int)list[1];
+
         #endregion
+
+        // Same instant, two places on Earth:
+        DateTimeOffset utc = new(2024, 6, 1, 12, 0, 0, TimeSpan.Zero);      // 12:00 +00:00
+        DateTimeOffset budapest = new(2024, 6, 1, 14, 0, 0, TimeSpan.FromHours(2)); // 14:00 +02:00
+
+        Console.WriteLine(utc == budapest);   // True  ← same MOMENT in time
+
+        TimeOnly opens = new(9, 0), closes = new(17, 30);
 
         Console.WriteLine();
     }
