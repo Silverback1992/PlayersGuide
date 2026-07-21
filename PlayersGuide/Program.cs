@@ -1,3 +1,3 @@
 ﻿using PlayersGuide.Notes;
 
-MyNotes.Show();
+MainNotes.Show();

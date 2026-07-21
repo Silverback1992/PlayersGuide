@@ -1,0 +1,7 @@
+﻿namespace PlayersGuide.Notes.SubNotes.NumericLiteralSuffixesHelpers;
+
+public static class MyMath
+{
+    public static void DoMath(int x) => Console.WriteLine("Doing int math");
+    public static void DoMath(long x) => Console.WriteLine("Doing long math");
+}
