@@ -23,6 +23,7 @@ public static class Generics
 
         // Generic method
         var words = GenericRepeater.Repeat("Hello", 3);
+        var numbers = GenericRepeater.Repeat(42, 5);
 
         // Generic type constraints
         var myConstrainedList = new ConstraitedList<GameObject>();
@@ -52,7 +53,7 @@ public static class Generics
         var memSystem = new MemorySystem();
         memSystem.AllocateMemory(5);
         memSystem.AllocateMemory(new Point());
-        // memSystem.AllocateMemory("Hello, World!"); -> not a value type so it does not satisfy the unmanaged constraint
+        // memSystem.AllocateMemory("Hello, World!"); // -> not a value type so it does not satisfy the unmanaged constraint
         // memSystem.AllocateMemory(new Player()); -> Player is a struct but it contains a reference type field so it does not satisfy the unmanaged constraint
         memSystem.AllocateMemory(new PlayerStats());
 
@@ -61,7 +62,8 @@ public static class Generics
         // eventBus.Publish<int?>(null); // only warning because notnull is a nullability constraint and not a type-identity constraint
         // eventBus.Publish<string?>(null); // only warning because notnull is a nullability constraint and not a type-identity constraint
         // there's already a notnull constraint on Dictionary
-        // var myDictionary = new Dictionary<int?, int>(); // warning
+        var myDictionary = new Dictionary<int?, int>(); // warning
+        myDictionary.Add(null, 100);
         eventBus.Publish("Player_Joined");
         eventBus.Publish(new PlayerDamagedEvent { Damage = 10 });
 

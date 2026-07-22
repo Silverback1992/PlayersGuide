@@ -77,13 +77,48 @@ public static class MainNotes
         // Same instant, two places on Earth:
         DateTimeOffset utc = new(2024, 6, 1, 12, 0, 0, TimeSpan.Zero);      // 12:00 +00:00
         DateTimeOffset budapest = new(2024, 6, 1, 14, 0, 0, TimeSpan.FromHours(2)); // 14:00 +02:00
+        var myDateTimeOffSet = DateTimeOffset.Now;
 
         Console.WriteLine(utc == budapest);   // True  ← same MOMENT in time
 
         TimeOnly opens = new(9, 0), closes = new(17, 30);
+        var now = TimeOnly.FromDateTime(DateTime.Now);
+        now.IsBetween(opens, closes);
 
         Console.WriteLine();
 
         int? myNullableInt = 3;
+
+        var myDateTime = new DateTime(2024, 6, 1, 12, 0, 0);
+        var myDateTime2 = new DateTime(2024, 6, 1, 14, 0, 0);
+        var asd = myDateTime2 - myDateTime;
+        var dsa = myDateTime + asd;
+
+        IEnumerable<int> myEnumerable = new List<int> { 1, 2, 3, 4, 5 };
+        int count = myEnumerable.Count();
+        int first = myEnumerable.First();
+        foreach (var item in myEnumerable)
+        {
+            Console.WriteLine(item);
+        }
+
+        var numbers = new List<int> { 1, 2, 3, 4, 5 };
+        var evens = numbers.Where(x => x % 2 == 0);
+        Console.WriteLine(evens.Count());
+        numbers.Add(6);
+        Console.WriteLine(evens.Count());
+
+        var words = new List<string> { "apple", "banana", "cherry" };
+        foreach (var word in words)
+        {
+            Console.WriteLine(word);
+        }
+
+        var iterator = words.GetEnumerator();
+        while (iterator.MoveNext())
+        {
+            string word = iterator.Current;
+            Console.WriteLine(word);
+        }
     }
 }
