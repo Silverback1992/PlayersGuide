@@ -16,6 +16,6 @@ public static class New
         // When a new member is defined unlike polymorphism the behaviour depends on the type of the variable involved not the instance's type.
         Derived derived = new();
         Base myBase = derived;
-        Console.WriteLine($"Derived and base check: {derived.Method} {myBase.Method}");
+        Console.WriteLine($"Derived and base check: {derived.Method()} {myBase.Method()}");
     }
 }

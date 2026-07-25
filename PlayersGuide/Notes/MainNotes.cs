@@ -72,7 +72,10 @@ public static class MainNotes
         Console.WriteLine();
         Generics.Show();
         Console.WriteLine();
-
+        SystemType.Show();
+        Console.WriteLine();
+        Date.Show();
+        Console.WriteLine();
 
         // Same instant, two places on Earth:
         DateTimeOffset utc = new(2024, 6, 1, 12, 0, 0, TimeSpan.Zero);      // 12:00 +00:00

@@ -58,14 +58,16 @@ public static class Generics
         memSystem.AllocateMemory(new PlayerStats());
 
         // notnull constraint
-        var eventBus = new EventBus();
-        // eventBus.Publish<int?>(null); // only warning because notnull is a nullability constraint and not a type-identity constraint
-        // eventBus.Publish<string?>(null); // only warning because notnull is a nullability constraint and not a type-identity constraint
         // there's already a notnull constraint on Dictionary
         var myDictionary = new Dictionary<int?, int>(); // warning
-        myDictionary.Add(null, 100);
-        eventBus.Publish("Player_Joined");
-        eventBus.Publish(new PlayerDamagedEvent { Damage = 10 });
+        // myDictionary.Add(null, 100); // runtime exception
+
+        // notnull constraint: EventBus
+        var eventBus = new EventBus();
+        eventBus.Subscribe<PlayerDamagedEvent>(e => Console.WriteLine($"[UI] Show damage number: -{e.Damage}"));
+        eventBus.Subscribe<PlayerDamagedEvent>(e => Console.WriteLine($"[Audio] Play hurt sound (damage {e.Damage})"));
+
+        eventBus.Publish(new PlayerDamagedEvent { Damage = 25 });
 
         // Variance
         // Converiance
