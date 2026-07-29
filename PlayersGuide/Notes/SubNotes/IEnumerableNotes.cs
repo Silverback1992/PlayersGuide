@@ -37,9 +37,18 @@ public static class IEnumerableNotes
         // IEnumerable<T> lazy vs ToList(): when and why
         // When to call ToList()
         // 1. Enumerate the result more than once
-        IEnumerable<int> myEnumerable = new List<int> { 1, 2, 3, 4, 5 };
+        var orders = new List<Order>()
+        {
+            new() { Total = 50 },
+            new() { Total = 150 },
+            new() { Total = 200 },
+            new() { Total = 75 },
+            new() { Total = 1300 },
+            new() { Total = 25 },
+        };
+        IEnumerable<Order> myEnumerable = orders.Where(o => o.Total > 100);
         int count = myEnumerable.Count();
-        int first = myEnumerable.First();
+        var first = myEnumerable.First();
         Console.WriteLine("Random numbers:");
         foreach (var item in myEnumerable)
         {
@@ -83,7 +92,7 @@ public static class IEnumerableNotes
         { }
 
         // Short circuiting
-        var orders = new List<Order>()
+        var orders2 = new List<Order>()
         {
             new() { Total = 50 },
             new() { Total = 150 },
@@ -93,6 +102,6 @@ public static class IEnumerableNotes
             new() { Total = 25 },
         };
 
-        var firstLargeOrder = orders.Where(o => o.Total > 100).First(); // could of course use First(o => o.Total > 100) instead but this is just for demonstration purposes of short circuiting
+        var firstLargeOrder = orders2.Where(o => o.Total > 100).First(); // could of course use First(o => o.Total > 100) instead but this is just for demonstration purposes of short circuiting
     }
 }
